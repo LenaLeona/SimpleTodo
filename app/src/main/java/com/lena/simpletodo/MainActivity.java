@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String KEY_ITEM_TEXT = "item_text";
     public static final String KEY_ITEM_POSITION = "item_position";
-    public static final int EDIT_TEXT_CODE = 20;
+    public static final int EDIT_TEXT_CODE = 20; //request code
 
     List<String> items; //as model
 
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         etItem = findViewById(R.id.etItem);
         rvItems = findViewById(R.id.rvItems);
 
-
         loadItems();
 
         ItemsAdapter.OnLongClickListener onLongClickListener = new ItemsAdapter.OnLongClickListener() {
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 saveItems();
             }
         };
+
         ItemsAdapter.OnClickListener onClickListener = new ItemsAdapter.OnClickListener() {
             @Override
             public void onItemClicked(int position) {
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         rvItems.setAdapter(itemsAdapter);
         rvItems.setLayoutManager(new LinearLayoutManager(this));
 
+
+        //enable the user to add items in the screen
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,16 +84,18 @@ public class MainActivity extends AppCompatActivity {
                 //Add item to the model
                 items.add(todoItem);
                 //Notify adapter that an item is inserted
-                itemsAdapter.notifyItemChanged(items.size() - 1);
+                itemsAdapter.notifyItemInserted(items.size() - 1);
                 etItem.setText("");
-                Toast.makeText(getApplicationContext(),"Item was added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Item was added",
+                        Toast.LENGTH_SHORT).show(); //show indication on the screen
                 saveItems();
             }
         });
     }
 
+
     // handle res of the edit activity
-    @Override
+    @SuppressLint("MissingSuperCall")
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && requestCode == EDIT_TEXT_CODE) {
             //Retrieve the updated text value
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+     /*Using Apache library to save user input on the screen*/
     private File getDateFile() {
         return new File(getFilesDir(), "data.txt");
     }

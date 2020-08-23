@@ -20,8 +20,10 @@ public class EditActivity extends AppCompatActivity {
         etItem = findViewById(R.id.etItem);
         btnSave = findViewById(R.id.btnSave);
 
+        //make the title more descriptive
         getSupportActionBar().setTitle("Edit item");
 
+        //handle data passed in by user edit
         etItem.setText(getIntent().getStringExtra(MainActivity.KEY_ITEM_TEXT));
 
         //When user done editing, they click the save button
